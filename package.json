@@ -1,0 +1,26 @@
+{
+  "name": "remsexpressserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kislaykk/RemsExpressServer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kislaykk/RemsExpressServer/issues"
+  },
+  "homepage": "https://github.com/kislaykk/RemsExpressServer#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mocha": "^8.4.0",
+    "nyc": "^15.1.0",
+    "sequelize": "^6.6.2",
+    "sinon": "^10.0.0"
+  }
+}
