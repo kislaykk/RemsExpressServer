@@ -12,7 +12,7 @@ router.post('/register', celebrate({
     name: Joi.string().trim().min(3).max(25)
       .required(),
     basedAt: Joi.string().trim(),
-    phoneNo: Joi.number().required(),
+    phoneNo: Joi.string().length(10).pattern(/^[0-9]+$/).required(),
     password: Joi.string().trim().min(8).max(20)
       .required(),
   }),
@@ -31,4 +31,5 @@ router.get('/resetPassword', (req, res, next) => {
   });
   next();
 });
+
 module.exports = router;

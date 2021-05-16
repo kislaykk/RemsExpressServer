@@ -21,7 +21,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       phoneNo: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.BIGINT,
         unique: true,
         allowNull: false,
       },

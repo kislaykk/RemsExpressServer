@@ -8,11 +8,11 @@ const registerClient = async (req, res, next) => {
     email, name, basedAt, phoneNo, password,
   } = req.body;
   try {
+    await db.sequelize.models.client.checkIfPhoneNoExists(phoneNo);
     const { user } = await createClient(email, password);
     // eslint-disable-next-line max-len
     await db.sequelize.models.client.storeInDb(email, name, basedAt, phoneNo, password, user.uid);
     res.status(200).json({
-      errorCode: 0,
       success: true,
       message: 'registered',
     });

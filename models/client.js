@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     name: DataTypes.STRING,
     basedAt: DataTypes.STRING,
-    phoneNo: DataTypes.NUMBER,
+    phoneNo: DataTypes.BIGINT,
     secret: DataTypes.STRING,
     password: DataTypes.STRING,
     uid: DataTypes.STRING,
@@ -37,10 +37,28 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'client',
   });
 
+  client.checkIfPhoneNoExists = (phoneNo) => new Promise((resolve, reject) => {
+    client.findOne({ where: { phoneNo } })
+      .then((val) => {
+        if (val) reject(new Error('sequelizeError:PhoneNo already exists'));
+        else resolve();
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
   // eslint-disable-next-line max-len
   client.storeInDb = (email, name, basedAt, phoneNo, password, uid) => new Promise((resolve, reject) => {
-    bcrypt.hash(password, 10 , (err1, encrypted) => {
+    bcrypt.hash(password, 10, (err1, encrypted) => {
       if (err1) reject(err1);
+      client.findOne({ where: { email } })
+        .then((val) => {
+          if (val) reject(new Error('sequelizeError:Email already exists'));
+        });
+      client.findOne({ where: { phoneNo } })
+        .then((val) => {
+          if (val) reject(new Error('sequelizeError:PhoneNo already exists'));
+        });
       client.create({
         email,
         name,
