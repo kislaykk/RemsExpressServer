@@ -3,7 +3,10 @@ const {
 } = require('sequelize');
 
 const bcrypt = require('bcrypt');
+const dotenv = require('dotenv');
 const generateRandomString = require('../functions/generateRandomString');
+
+dotenv.config();
 
 module.exports = (sequelize, DataTypes) => {
   class client extends Model {
@@ -33,9 +36,10 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'client',
   });
+
   // eslint-disable-next-line max-len
   client.storeInDb = (email, name, basedAt, phoneNo, password, uid) => new Promise((resolve, reject) => {
-    bcrypt.hash(password, process.env.SALT_ROUND, (err1, encrypted) => {
+    bcrypt.hash(password, 10 , (err1, encrypted) => {
       if (err1) reject(err1);
       client.create({
         email,
