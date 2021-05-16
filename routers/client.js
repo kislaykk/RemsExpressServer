@@ -3,6 +3,7 @@ const {
   celebrate, Joi, Segments,
 } = require('celebrate');
 const registerClient = require('../controllers/registerClient');
+const signInClient = require('../controllers/signInClient');
 
 const router = express.Router();
 
@@ -18,12 +19,13 @@ router.post('/register', celebrate({
   }),
 }), registerClient);
 
-router.post('/signIn', (req, res, next) => {
-  res.status(200).json({
-    message: 'signedIn',
-  });
-  next();
-});
+router.post('/signIn', celebrate({
+  [Segments.BODY]: Joi.object().keys({
+    email: Joi.string().email().required(),
+    password: Joi.string().trim().min(8).max(20)
+      .required(),
+  }),
+}), signInClient);
 
 router.get('/resetPassword', (req, res, next) => {
   res.status(200).json({
