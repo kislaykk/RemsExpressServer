@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const { isCelebrateError } = require('celebrate');
 const isSequelizeError = require('./functions/isSequelizeError');
 const client = require('./routers/client');
+const property = require('./routers/property');
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.all('/', (req, res) => {
 });
 
 app.use('/client', client);
+app.use('/property', property);
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
@@ -51,6 +53,11 @@ app.use((err, req, res, next) => {
     res.status(400).json({
       success: false,
       message: 'using a weak password',
+    });
+  } else if (err.message === 'FORBIDDEN') {
+    res.status(403).json({
+      success: false,
+      message: 'FORBIDDEN',
     });
   } else {
     // eslint-disable-next-line no-console

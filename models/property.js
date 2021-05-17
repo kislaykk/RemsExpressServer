@@ -30,11 +30,28 @@ module.exports = (sequelize, DataTypes) => {
     toSell: DataTypes.BOOLEAN,
     toLease: DataTypes.BOOLEAN,
     cost: DataTypes.NUMBER,
-    type: DataTypes.INTEGER,
     clientId: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'property',
+  });
+
+  property.addProperty = (clientId, {
+    name, street, locality, city, state, pin,
+  }) => new Promise((resolve, reject) => {
+    const address = {
+      street, city, locality, state, pin,
+    };
+    property.create({
+      name,
+      address,
+      clientId,
+    }).then((val) => {
+      resolve(val);
+    })
+      .catch((err) => {
+        reject(err);
+      });
   });
   return property;
 };

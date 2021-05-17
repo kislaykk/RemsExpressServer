@@ -38,6 +38,16 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'client',
   });
 
+  client.getClientSecret = (id) => new Promise((resolve, reject) => {
+    client.findByPk(id)
+      .then((val) => {
+        if (!val) reject(new Error('FORBIDDEN'));
+        resolve(val.secret);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
   client.checkIfPhoneNoExists = (phoneNo) => new Promise((resolve, reject) => {
     client.findOne({ where: { phoneNo } })
       .then((val) => {
