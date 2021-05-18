@@ -1,6 +1,7 @@
 const express = require('express');
 
 const app = express();
+const cors = require('cors');
 const dotenv = require('dotenv');
 const { isCelebrateError } = require('celebrate');
 const isSequelizeError = require('./functions/isSequelizeError');
@@ -13,6 +14,7 @@ const { PORT } = process.env;
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(cors());
 
 app.all('/', (req, res) => {
   res.status(200).json({
@@ -35,27 +37,27 @@ app.use((err, req, res, next) => {
     });
   } else if (isSequelizeError(err)) { // error due to database constraints
     const message = err.message.split(':')[1];
-    res.status(400).json({
+    res.status(200).json({
       success: false,
       message,
     });
   } else if (err.code === 'auth/email-already-in-use') {
-    res.status(400).json({
+    res.status(200).json({
       success: false,
       message: 'Email is already registered',
     });
   } else if (err.code === 'auth/invalid-email') {
-    res.status(400).json({
+    res.status(200).json({
       success: false,
       message: 'Email is invalid',
     });
   } else if (err.code === 'auth/weak-password') {
-    res.status(400).json({
+    res.status(200).json({
       success: false,
       message: 'using a weak password',
     });
   } else if (err.message === 'FORBIDDEN') {
-    res.status(403).json({
+    res.status(200).json({
       success: false,
       message: 'FORBIDDEN',
     });
@@ -68,7 +70,8 @@ app.use((err, req, res, next) => {
     });
   }
 });
-app.listen(PORT, () => {
+// eslint-disable-next-line radix
+app.listen(parseInt(PORT), () => {
   // eslint-disable-next-line no-console
   console.log(`Running on:${PORT}`);
 });

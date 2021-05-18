@@ -22,8 +22,7 @@ router.post('/register', celebrate({
 router.post('/signIn', celebrate({
   [Segments.BODY]: Joi.object().keys({
     email: Joi.string().email().required(),
-    password: Joi.string().trim().min(8).max(20)
-      .required(),
+    password: Joi.string().trim().required(),
   }),
 }), signInClient);
 
