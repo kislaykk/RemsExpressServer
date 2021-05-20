@@ -35,7 +35,15 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'property',
   });
-
+  property.getProperty = (clientId) => new Promise((resolve, reject) => {
+    property.findAll({ where: { clientId } })
+      .then((values) => {
+        resolve(values);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
   property.addProperty = (clientId, {
     name, street, locality, city, state, pin,
   }) => new Promise((resolve, reject) => {

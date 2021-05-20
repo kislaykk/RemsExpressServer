@@ -4,8 +4,11 @@ const {
 } = require('celebrate');
 const decodeJWT = require('../controllers/decodeJWT');
 const addProperty = require('../controllers/addProperty');
+const getProperty = require('../controllers/getProperty');
 
 const router = express.Router();
+
+router.get('/', decodeJWT, getProperty);
 
 router.post('/add', decodeJWT, celebrate({
 
