@@ -5,6 +5,7 @@ const {
 const decodeJWT = require('../controllers/decodeJWT');
 const addProperty = require('../controllers/addProperty');
 const getProperty = require('../controllers/getProperty');
+const deleteProperty = require('../controllers/deleteProperty');
 
 const router = express.Router();
 
@@ -27,5 +28,12 @@ router.post('/add', decodeJWT, celebrate({
   }),
 }),
 addProperty);
+
+router.delete('/', decodeJWT, celebrate({
+  [Segments.BODY]: Joi.object().keys({
+    id: Joi.number().integer().positive().required(),
+  }),
+}),
+deleteProperty);
 
 module.exports = router;

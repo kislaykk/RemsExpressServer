@@ -61,5 +61,16 @@ module.exports = (sequelize, DataTypes) => {
         reject(err);
       });
   });
+  property.deleteProperty = (clientId, { id }) => new Promise((resolve, reject) => {
+    property.findByPk(id)
+      .then(async (instance) => {
+        if (!instance) reject(new Error('sequelizeError:Property does not exist'));
+        await instance.destroy();
+        resolve();
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
   return property;
 };
