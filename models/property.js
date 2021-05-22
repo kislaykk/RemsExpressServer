@@ -22,6 +22,11 @@ module.exports = (sequelize, DataTypes) => {
           name: 'propertyId',
         },
       });
+      property.hasMany(models.expenditure, {
+        foreignKey: {
+          name: 'propertyId',
+        },
+      });
     }
   }
   property.init({
