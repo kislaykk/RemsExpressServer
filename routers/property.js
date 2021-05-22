@@ -6,6 +6,7 @@ const decodeJWT = require('../controllers/decodeJWT');
 const addProperty = require('../controllers/addProperty');
 const getProperty = require('../controllers/getProperty');
 const deleteProperty = require('../controllers/deleteProperty');
+const editProperty = require('../controllers/editProperty');
 
 const router = express.Router();
 
@@ -35,5 +36,23 @@ router.delete('/', decodeJWT, celebrate({
   }),
 }),
 deleteProperty);
+
+router.put('/', decodeJWT, celebrate({
+
+  [Segments.BODY]: Joi.object().keys({
+    id: Joi.number().integer().required(),
+    name: Joi.string().trim().min(3).max(25)
+      .required(),
+    street: Joi.string().trim().min(3).max(25)
+      .required(),
+    locality: Joi.string().trim().min(3).max(25)
+      .required(),
+    city: Joi.string().trim().min(3).max(25)
+      .required(),
+    state: Joi.string().trim().min(3).max(25)
+      .required(),
+    pin: Joi.number().integer().required(),
+  }),
+}), editProperty);
 
 module.exports = router;

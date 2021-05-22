@@ -65,8 +65,33 @@ module.exports = (sequelize, DataTypes) => {
     property.findByPk(id)
       .then(async (instance) => {
         if (!instance) reject(new Error('sequelizeError:Property does not exist'));
-        await instance.destroy();
-        resolve();
+        else if (instance.clientId !== clientId) reject(new Error('FORBIDDEN'));
+        else {
+          await instance.destroy();
+          resolve();
+        }
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+
+  property.editProperty = (clientId, {
+    name, street, locality, city, state, pin, id,
+  }) => new Promise((resolve, reject) => {
+    property.findByPk(id)
+      .then(async (instance) => {
+        if (!instance) reject(new Error('sequelizeError:Property does not exist'));
+        else if (instance.clientId !== clientId) reject(new Error('FORBIDDEN'));
+        else {
+          await instance.update({
+            name,
+            address: {
+              street, locality, city, state, pin,
+            },
+          });
+          resolve();
+        }
       })
       .catch((err) => {
         reject(err);
