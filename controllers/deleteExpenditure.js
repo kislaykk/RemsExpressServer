@@ -13,7 +13,7 @@ const deleteExpenditure = async (req, res, next) => {
       await exp.destroy();
       res.status(200).json({
         success: true,
-        expenditures: 'record deleted',
+        message: 'record deleted',
       });
     }
   } catch (error) {
