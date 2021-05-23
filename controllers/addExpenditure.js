@@ -17,7 +17,7 @@ const addExpenditure = async (req, res, next) => {
       await property.addExpenditure(exp);
       res.status(200).json({
         success: true,
-        expenditures: 'tansaction added',
+        message: 'tansaction added',
       });
     }
   } catch (error) {
