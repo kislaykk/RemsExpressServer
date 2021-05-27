@@ -27,6 +27,11 @@ module.exports = (sequelize, DataTypes) => {
           name: 'propertyId',
         },
       });
+      property.hasMany(models.request, {
+        foreignKey: {
+          name: 'propertyId',
+        },
+      });
     }
   }
   property.init({
