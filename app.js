@@ -8,6 +8,7 @@ const isSequelizeError = require('./functions/isSequelizeError');
 const client = require('./routers/client');
 const property = require('./routers/property');
 const expenditure = require('./routers/expenditure');
+const requests = require('./routers/request');
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.all('/', (req, res) => {
 app.use('/client', client);
 app.use('/property', property);
 app.use('/expenditure', expenditure);
+app.use('/request', requests);
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {

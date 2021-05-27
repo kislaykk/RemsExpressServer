@@ -1,5 +1,5 @@
 const {
-  Model,
+  Model, Op,
 } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
@@ -85,7 +85,21 @@ module.exports = (sequelize, DataTypes) => {
         reject(err);
       });
   });
-
+  property.getAllProperty = (clientId) => new Promise((resolve, reject) => {
+    property.findAll({
+      where: {
+        clientId: {
+          [Op.ne]: clientId,
+        },
+      },
+    })
+      .then((values) => {
+        resolve(values);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
   property.editProperty = (clientId, {
     name, street, locality, city, state, pin, id,
   }) => new Promise((resolve, reject) => {

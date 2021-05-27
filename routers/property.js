@@ -7,10 +7,12 @@ const addProperty = require('../controllers/addProperty');
 const getProperty = require('../controllers/getProperty');
 const deleteProperty = require('../controllers/deleteProperty');
 const editProperty = require('../controllers/editProperty');
+const getAllProperty = require('../controllers/getAllProperty');
 
 const router = express.Router();
 
 router.get('/', decodeJWT, getProperty);
+router.get('/all', decodeJWT, getAllProperty);
 
 router.post('/add', decodeJWT, celebrate({
 
