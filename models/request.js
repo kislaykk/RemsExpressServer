@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const {
   Model,
 } = require('sequelize');
@@ -82,6 +83,64 @@ module.exports = (sequelize, DataTypes) => {
         return value.destroy();
       })
       .then((res) => resolve(res))
+      .catch((error) => { reject(error); });
+  });
+  request.acceptRequest = (clientId, { id, propertyId }) => new Promise((resolve, reject) => {
+    let reques;
+    request.findOne({
+      where: {
+        id,
+        propertyId,
+      },
+    })
+      .then((value) => {
+        if (!value) reject(new Error('sequelizeError:request does not exist'));
+        reques = value;
+        return sequelize.models.property.findByPk(propertyId);
+      })
+      .then((property) => {
+        if (!property) reject(new Error('sequelizeError:property does not exist'));
+        return property.getClient();
+      })
+      .then((client) => {
+        if (client.id !== clientId) reject(new Error('FORBIDDEN'));
+        return sequelize.models.tenant.create({ propertyId, leasedById: reques.clientId });
+      })
+      .then((val) => sequelize.models.request.destroy({
+        where: {
+          id,
+        },
+      }))
+      .then((val) => {
+        resolve(val);
+      })
+      .catch((error) => { reject(error); });
+  });
+  request.rejectRequest = (clientId, { id }) => new Promise((resolve, reject) => {
+    request.findOne({
+      where: {
+        id,
+      },
+    })
+      .then((value) => {
+        if (!value) reject(new Error('sequelizeError:request does not exist'));
+        return sequelize.models.property.findByPk(value.propertyId);
+      })
+      .then((property) => {
+        if (!property) reject(new Error('sequelizeError:property does not exist'));
+        return property.getClient();
+      })
+      .then((client) => {
+        if (client.id !== clientId) reject(new Error('FORBIDDEN'));
+        return sequelize.models.request.destroy({
+          where: {
+            id,
+          },
+        });
+      })
+      .then((val) => {
+        resolve(val);
+      })
       .catch((error) => { reject(error); });
   });
   return request;

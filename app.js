@@ -9,6 +9,7 @@ const client = require('./routers/client');
 const property = require('./routers/property');
 const expenditure = require('./routers/expenditure');
 const requests = require('./routers/request');
+const tenants = require('./routers/tenant');
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use('/client', client);
 app.use('/property', property);
 app.use('/expenditure', expenditure);
 app.use('/request', requests);
+app.use('/tenant', tenants);
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {

@@ -26,5 +26,33 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'tenant',
   });
+  tenant.removeTenant = (userId, { propertyId, leasedById }) => new Promise((resolve, reject) => {
+    tenant.findOne({
+      where: {
+        propertyId,
+        leasedById,
+      },
+    })
+      .then((value) => {
+        if (!value) reject(new Error('sequelizeError:No such tenant exists'));
+        return sequelize.models.property.findByPk(propertyId);
+      })
+      .then((property) => property.getClient())
+      .then((client) => {
+        if (client.id !== userId) reject(new Error('FORBIDDEN'));
+        return tenant.destroy({
+          where: {
+            propertyId,
+            leasedById,
+          },
+        });
+      })
+      .then((val) => {
+        resolve(val);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
   return tenant;
 };

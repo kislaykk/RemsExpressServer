@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
           onDelete: 'CASCADE',
         },
       });
-      property.hasOne(models.tenant, {
+      property.hasMany(models.tenant, {
         foreignKey: {
           name: 'propertyId',
         },
@@ -53,6 +53,15 @@ module.exports = (sequelize, DataTypes) => {
       .catch((err) => {
         reject(err);
       });
+  });
+  property.getTenantsFromDb = (clientId, { id }) => new Promise((resolve, reject) => {
+    property.findByPk(id)
+      .then((value) => {
+        if (!value) reject(new Error('sequelizeError:No such property'));
+        return value.getTenants();
+      })
+      .then((tenants) => { resolve(tenants); })
+      .catch((err) => { reject(err); });
   });
   property.addProperty = (clientId, {
     name, street, locality, city, state, pin,

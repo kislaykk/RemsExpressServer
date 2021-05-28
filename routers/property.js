@@ -8,10 +8,12 @@ const getProperty = require('../controllers/getProperty');
 const deleteProperty = require('../controllers/deleteProperty');
 const editProperty = require('../controllers/editProperty');
 const getAllProperty = require('../controllers/getAllProperty');
+const getTenants = require('../controllers/getTenants');
 
 const router = express.Router();
 
 router.get('/', decodeJWT, getProperty);
+
 router.get('/all', decodeJWT, getAllProperty);
 
 router.post('/add', decodeJWT, celebrate({
@@ -31,6 +33,13 @@ router.post('/add', decodeJWT, celebrate({
   }),
 }),
 addProperty);
+
+router.post('/tenants', decodeJWT, celebrate({
+  [Segments.BODY]:Joi.object().keys({
+    id: Joi.number().integer().positive().required(),
+  })
+}),
+getTenants);
 
 router.delete('/', decodeJWT, celebrate({
   [Segments.BODY]: Joi.object().keys({
