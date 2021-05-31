@@ -92,7 +92,21 @@ module.exports = (sequelize, DataTypes) => {
         });
     });
   });
-
+  client.detailsOfAClient = ({ id }) => new Promise((resolve, reject) => {
+    client.findByPk(id)
+      .then((val) => {
+        if (!val) reject(new Error('No user found'));
+        else {
+          resolve({
+            name: val.name,
+            email: val.email,
+            phoneNo: val.phoneNo,
+            basedAt: val.basedAt,
+          });
+        }
+      })
+      .catch((err) => { reject(err); });
+  });
   client.signIn = (email, password) => new Promise((resolve, reject) => {
     client.findOne({ where: { email } })
       .then((val) => {
