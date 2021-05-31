@@ -6,8 +6,11 @@ const decodeJWT = require('../controllers/decodeJWT');
 const getExpenditure = require('../controllers/getExpenditure');
 const addExpenditure = require('../controllers/addExpenditure');
 const deleteExpenditure = require('../controllers/deleteExpenditure');
+const getTotalExpenseAndIncome = require('../controllers/getAllExpenditure');
 
 const router = express.Router();
+
+router.get('/expInc', decodeJWT, getTotalExpenseAndIncome);
 
 router.get('/:propertyId', decodeJWT, celebrate({
   [Segments.PARAMS]: Joi.object().keys({
