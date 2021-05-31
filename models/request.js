@@ -40,6 +40,15 @@ module.exports = (sequelize, DataTypes) => {
     })
       .then((val) => {
         if (val) throw new Error('sequelizeError:already requested');
+        return sequelize.models.tenant.findOne({
+          where: {
+            leasedById: clientId,
+            propertyId,
+          },
+        });
+      })
+      .then((val) => {
+        if (val) throw new Error('sequelizeError:it is already rented to you');
         return request.create({ clientId, propertyId, requestType });
       })
       .then((val) => {
